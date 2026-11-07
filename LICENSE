@@ -1,0 +1,63 @@
+MakeIt Wall – Private Use License
+
+Copyright (c) 2026 Flo. All rights reserved.
+
+"Software" means MakeIt Wall, including its source code, its user interface, the
+built-in examples and shapes, the documentation and the images in this repository.
+"Outputs" means everything created with the Software, in particular 3MF and PDF
+files, printed tiles, walls, connectors and caps.
+
+1. Permitted use
+   You may download the Software, open it in your web browser and use it free of
+   charge for your own private, non-commercial purposes. This permission is
+   personal, non-exclusive, non-transferable and revocable.
+
+2. Prohibited
+   Unless the copyright holder has given written permission, you may not:
+   a) sell, rent, lease, license, sublicense or otherwise commercially exploit
+      the Software, or use it for a business or other commercial purpose;
+   b) modify, adapt, translate or otherwise change the Software, or create
+      derivative works based on it or on any part of it;
+   c) copy, publish, host or distribute the Software or any part of it, apart
+      from downloading it for your own private use as permitted in section 1;
+      linking to the official repository is allowed;
+   d) remove or change this license, copyright notices or names in the Software.
+
+3. Outputs
+   Outputs may only be used for private, non-commercial purposes. Selling Outputs
+   or otherwise using them commercially – including offering 3MF or PDF files,
+   printed parts or walls for sale, on commission or as paid downloads – is
+   reserved to the copyright holder.
+
+4. Ownership
+   The Software is licensed, not sold. All rights not expressly granted in this
+   license remain with the copyright holder.
+
+5. GitHub
+   This repository is public on GitHub. Viewing and forking it within GitHub is
+   permitted only as far as the GitHub Terms of Service require; this grants no
+   further rights.
+
+6. Third-party components
+   The Software loads third-party libraries that are licensed under their own
+   licenses (see THIRD_PARTY_NOTICES.md). This license does not apply to them.
+
+7. Termination
+   Any breach of this license ends your rights under it automatically. You must
+   then stop using the Software and delete all copies.
+
+8. No warranty, liability
+   The Software is provided free of charge and "as is", without warranty of any
+   kind. Check every file before printing and every wall before mounting it.
+   The copyright holder is liable only for intent and gross negligence. Liability
+   for injury to life, body or health and liability under mandatory law remain
+   unaffected.
+
+9. Commercial use
+   For commercial use or any other use not permitted here, ask for a separate
+   license through the official repository.
+
+10. Governing law
+   This license is governed by the laws of the Federal Republic of Germany.
+   Mandatory consumer protection rules of your country of residence remain
+   unaffected.
