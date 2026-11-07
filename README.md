@@ -8,7 +8,7 @@
 
 Everything runs in your browser. No account, no upload, no install.
 
-**[▶ Open MakeIt Wall](https://YOUR-GITHUB-NAME.github.io/makeit-wall/)** &nbsp;·&nbsp; [Download the latest version](../../releases/latest)
+**[▶ Open MakeIt Wall](https://flawlessFlow.github.io/makeit-wall/)** &nbsp;·&nbsp; [Download the latest version](../../releases/latest)
 
 ![MakeIt Wall – wall and tiles](docs/screenshot-main.png)
 
