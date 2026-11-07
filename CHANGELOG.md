@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.0 – 2026-11-07
+
+- The link to more examples (step 2 Artwork) now opens the MakeIt Wall collection on MakerWorld
+
 ## v1.2.0 – 2026-11-07
 
 - Link to more MakeIt Wall examples on MakerWorld (step 2 Artwork)

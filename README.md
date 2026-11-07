@@ -62,8 +62,8 @@ Download `index.html` (or the file attached to the [latest release](../../releas
 
 ## More walls & support
 
-Printed examples and ready-made walls are on MakerWorld: **[@flowok](https://makerworld.com/de/collections/39915612-makeit-wall)**.
-If MakeIt Wall is useful to you, please **[boost and rate the MakeIt Wall model](https://makerworld.com/en/models/3565219-skadis-landscape-mountains-makeit-wall#profileId-4080384)** and follow @flowok. It helps a lot!
+Printed examples and ready-made walls are in the **[MakeIt Wall collection](https://makerworld.com/de/collections/39915612-makeit-wall)** on MakerWorld.
+If MakeIt Wall is useful to you, please **[boost and rate the MakeIt Wall model](https://makerworld.com/en/models/3565219-skadis-landscape-mountains-makeit-wall#profileId-4080384)** and follow [@flowok](https://makerworld.com/de/@flowok). It helps a lot!
 
 ## Feedback
 
