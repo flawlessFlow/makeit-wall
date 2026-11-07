@@ -66,7 +66,7 @@ Found a bug or a wall that does not export correctly? Please [open an issue](../
 
 ## License
 
-Copyright © 2026 Flo. All rights reserved.
+Copyright © 2026 Florian Mehner. All rights reserved.
 MakeIt Wall is **free to use for private, non-commercial purposes**. Selling the software or anything made with it (files, printed tiles, walls), changing it or passing it on is not allowed. See [LICENSE](LICENSE) for the full terms. For commercial use, please ask through [Issues](../../issues).
 Third-party libraries and data are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
