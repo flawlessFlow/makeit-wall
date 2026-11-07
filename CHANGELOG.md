@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.0 – 2026-11-07
+
+- Link to more MakeIt Wall examples on MakerWorld (step 2 Artwork)
+- Short thank-you note after the 3MF export with links to MakerWorld
+
 ## v1.0.0 – 2026-11-07
 
 First public release.

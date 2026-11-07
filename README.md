@@ -8,7 +8,7 @@
 
 Everything runs in your browser. No account, no upload, no install.
 
-**[▶ Open MakeIt Wall](https://flawlessFlow.github.io/makeit-wall/)** &nbsp;·&nbsp; [Download the latest version](../../releases/latest)
+**[▶ Open MakeIt Wall](https://flawlessFlow.github.io/makeit-wall/)** &nbsp;·&nbsp; [Download the latest version](../../releases/latest) &nbsp;·&nbsp; [More walls on MakerWorld](https://makerworld.com/en/@flowok)
 
 ![MakeIt Wall – wall and tiles](docs/screenshot-main.png)
 
@@ -59,6 +59,11 @@ Your settings never leave your computer. MakeIt Wall has no server, no tracking 
 ## Run it offline / locally
 
 Download `index.html` (or the file attached to the [latest release](../../releases/latest)) and open it in your browser. The browser still needs internet access to load the libraries listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+## More walls & support
+
+Printed examples and ready-made walls are on MakerWorld: **[@flowok](https://makerworld.com/en/@flowok)**.
+If MakeIt Wall is useful to you, please **[boost and rate the MakeIt Wall model](https://makerworld.com/en/models/3565219-skadis-landscape-mountains-makeit-wall#profileId-4080384)** and follow @flowok. It helps a lot!
 
 ## Feedback
 
