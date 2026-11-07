@@ -1,0 +1,33 @@
+name: Bug report
+description: Something does not work or an export looks wrong
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and system
+      placeholder: e.g. Chrome 130 on Windows 11
+    validations:
+      required: true
+  - type: dropdown
+    id: printer
+    attributes:
+      label: Printer
+      options: [A1 mini, A1, P1S / P1P, X1, H2D, Custom bed]
+  - type: input
+    id: version
+    attributes:
+      label: MakeIt Wall version
+      placeholder: e.g. v1.0.0
+  - type: textarea
+    id: shots
+    attributes:
+      label: Screenshots / files
+      description: A screenshot of your settings helps a lot. Drag the 3MF in here if the problem shows in Bambu Studio.
