@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.4.0 – 2026-11-14
+
+- Fixed: some 3D shapes (for example Ripple) could export colour parts with open edges
+- Faster 3MF export (the files are a few percent larger)
+
 ## v1.3.0 – 2026-11-07
 
 - The link to more examples (step 2 Artwork) now opens the MakeIt Wall collection on MakerWorld

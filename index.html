@@ -1071,6 +1071,17 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
     });
     return exs.map(e => ({ outer: nudge(e.outer), holes: (e.holes || []).map(nudge) }));
   }
+
+  function isClosed(mesh) {
+    const t = mesh.t, n = mesh.v.length / 3, e = new Map();
+    for (let k = 0; k < t.length; k += 3) for (let j = 0; j < 3; j++) { const key = t[k + j] * n + t[k + (j + 1) % 3]; e.set(key, (e.get(key) || 0) + 1); }
+    for (const [key, c] of e) { const a = Math.floor(key / n), b = key - a * n; if (c !== 1 || e.get(b * n + a) !== 1) return false; }
+    return true;
+  }
+  function tidyArea(paths) {
+    const off = (src, d) => { const c = new CL.ClipperOffset(2, 0.25), out = new CL.Paths(); c.AddPaths(src, CL.JoinType.jtMiter, CL.EndType.etClosedPolygon); c.Execute(out, d); return out; };
+    return unpinch(clipExPolys(CL.ClipType.ctUnion, off(off(off(paths, -10), 20), -11), null));
+  }
   const exToRings = ex => [ex.outer, ...ex.holes].map(p => p.map(q => [q.X / SCALE, q.Y / SCALE]));
   function cylinder(mesh, cx, cy, r, z0, z1, seg = 32) { extrudePoly(mesh, [circlePolygon(cx, cy, r, seg)], z0, z1); }
 
@@ -1135,10 +1146,12 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
         const thin = new CL.Paths(); co.Execute(thin, -10);
         shrunk = off(off(thin, 20), -11);
       } else co.Execute(shrunk, -1);
-      const ex = unpinch(clipExPolys(CL.ClipType.ctUnion, shrunk, null));
+      const raw = clipExPolys(CL.ClipType.ctUnion, shrunk, null), ex = unpinch(raw);
       if (!ex.length) return;
-      const mesh = new Mesh();
+      let mesh = new Mesh();
       for (const e of ex) extrudePoly(mesh, exToRings(e), z0, z1);
+
+      if (!o.vec && ex !== raw && !isClosed(weld(mesh))) { mesh = new Mesh(); for (const e of tidyArea(clipPaths(CL.ClipType.ctIntersection, paths, solid))) extrudePoly(mesh, exToRings(e), z0, z1); }
       if (mesh.t.length) parts.push({ name: 'Color ' + (lbl + 1) + tag, label: lbl, mesh, kind: 'color' });
     }));
 
@@ -1414,7 +1427,7 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
     files['[Content_Types].xml'] = enc(`<?xml version="1.0" encoding="UTF-8"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">\n <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>\n <Default Extension="model" ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/>\n <Default Extension="png" ContentType="image/png"/>\n</Types>\n`);
     if (opts.project) files['Metadata/project_settings.config'] = enc(projectSettings(Object.assign({}, opts.project, { towers })));
     files['Metadata/model_settings.config'] = enc(`<?xml version="1.0" encoding="UTF-8"?>\n<config>\n${cfgObjs.join('\n')}\n${plates.join('\n')}\n  <assemble>\n${assemble.join('\n')}\n  </assemble>\n</config>\n`);
-    return fflate.zipSync(files, { level: 6 });
+    return fflate.zipSync(files, { level: 3 });
   }
 
   const CAP = { pitch: 13, gap: 5, edge: 3, corner: 60 };
@@ -4105,7 +4118,7 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
     'scale', 'offX', 'offY', 'rot', 'k', 'nodes', 'gap', 'line', 'pal', 'merges', 'body', 'round', 'snap'];
   const snapshot = () => JSON.stringify(Object.fromEntries(KEEP.map(k => [k, S[k]])));
 
-  const FORMAT = 1, APP_VERSION = 'V1';
+  const FORMAT = 1, APP_VERSION = 'V1.4';
   const isObj = v => v && typeof v === 'object' && !Array.isArray(v);
   function normalizeState(st, defaults) {
     const out = JSON.parse(JSON.stringify(defaults));
