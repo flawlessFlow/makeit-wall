@@ -1,5 +1,22 @@
 # Changelog
 
+## v2.1.0 – 2026-11-24
+
+- Your own image as artwork: PNG, JPG, SVG or WebP, chosen, dropped onto the page or pasted. The wall takes the image's format.
+- Colour around the image (when you shrink, move or turn it), with a pipette to take it from the image
+- "Colours that must stay": pick colours in the image, or choose them from candidates, and they keep their place in the palette
+- The image is part of undo / redo and the autosave in your browser
+
+## v2.0.0 – 2026-11-24
+
+- Millimetres or inches for every length on the page and in the guide PDF (button in the top bar; the first time it follows your browser's region)
+- Size formats: 1:1, 4:3, 3:2, 16:9, poster sizes and the IKEA SKÅDIS board sizes, with a landscape / portrait switch
+- Cover caps for the screw heads, showing the artwork at their spot (the screws become one size shorter)
+- "Save material": leaner print settings for the tiles – fewer back layers and 10 % infill
+- Snap pins and the rounded front edge on the slots are now the defaults
+- Larger, easier-to-read text on laptop screens
+- The colour & fit test is upright (120 × 160 mm) for an upright wall
+
 ## v1.4.0 – 2026-11-14
 
 - Fixed: some 3D shapes (for example Ripple) could export colour parts with open edges
