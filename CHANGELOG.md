@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.2.0 – 2026-11-25
+
+- Screw holes never overlap: two holes of one tile closer than 13 mm become one hole (e.g. a narrow strip next to a cut-out)
+- Narrow strips next to cut-outs keep their full size: their corners are rounded one by one instead of the strip being cut away, and the strip gets its own hole and connector
+
 ## v2.1.0 – 2026-11-24
 
 - Your own image as artwork: PNG, JPG, SVG or WebP, chosen, dropped onto the page or pasted. The wall takes the image's format.

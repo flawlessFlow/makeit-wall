@@ -2915,6 +2915,34 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
           return out;
         };
         rounded = off(off(region, -R), R);
+        if (!free) {
+          const area = ps => ps.reduce((s, p) => s + CL.Clipper.Area(p), 0) / 1e3 / 1e3;
+          const fil = function filletCorners(paths, R) {
+            const out = paths.map(path => {
+              const P = path.map(q => [ q.X / 1e3, q.Y / 1e3 ]), n = P.length, ring = [];
+              for (let k = 0; k < n; k++) {
+                const p = P[(k - 1 + n) % n], v = P[k], q = P[(k + 1) % n];
+                const a = [ v[0] - p[0], v[1] - p[1] ], b = [ q[0] - v[0], q[1] - v[1] ], la = Math.hypot(...a), lb = Math.hypot(...b);
+                const r = Math.min(R, la / 2, lb / 2);
+                if (a[0] * b[1] - a[1] * b[0] <= 0 || Math.abs(a[0] * b[0] + a[1] * b[1]) > 1e-6 * la * lb || r < .05) {
+                  ring.push(v);
+                  continue;
+                }
+                const ua = [ a[0] / la, a[1] / la ], ub = [ b[0] / lb, b[1] / lb ], c = [ v[0] + (ub[0] - ua[0]) * r, v[1] + (ub[1] - ua[1]) * r ];
+                const steps = Math.max(2, Math.ceil(Math.PI / 2 / Math.acos(1 - Math.min(.05, r / 2) / r)));
+                const s0 = Math.atan2(-ua[1] * r + v[1] - c[1], -ua[0] * r + v[0] - c[0]);
+                for (let i = 0; i <= steps; i++) {
+                  const g = s0 + Math.PI / 2 * i / steps;
+                  ring.push([ c[0] + r * Math.cos(g), c[1] + r * Math.sin(g) ]);
+                }
+              }
+              return toPath(ring);
+            });
+            return CL.Clipper.CleanPolygons(out, 5);
+          }(region, R);
+          const nV = region.reduce((s, p) => s + p.length, 0);
+          area(fil) - area(rounded) > 1 + .1 * R * nV && (rounded = fil);
+        }
       }
       L.regionPaths = rounded;
       const rowsN = ys.length - 1;
@@ -2952,7 +2980,7 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
           });
           const inner = (() => {
             const co = new CL.ClipperOffset(2, .25), out = new CL.Paths;
-            co.AddPaths(exPaths, CL.JoinType.jtMiter, CL.EndType.etClosedPolygon);
+            co.AddPaths(paths, CL.JoinType.jtMiter, CL.EndType.etClosedPolygon);
             co.Execute(out, 1e3 * -(SK.csR + 1.5));
             return out;
           })();
@@ -2960,6 +2988,17 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
             X: Math.round(1e3 * x),
             Y: Math.round(1e3 * y)
           }, pth)));
+          m4 = m4.reduce((keep, p) => {
+            const k = keep.findIndex(q => Math.hypot(q[0] - p[0], q[1] - p[1]) < 13);
+            if (k < 0) keep.push(p); else {
+              const mid = [ (keep[k][0] + p[0]) / 2, (keep[k][1] + p[1]) / 2 ];
+              (([x, y]) => inner.some(pth => 0 !== CL.Clipper.PointInPolygon({
+                X: Math.round(1e3 * x),
+                Y: Math.round(1e3 * y)
+              }, pth)))(mid) && (keep[k] = mid);
+            }
+            return keep;
+          }, []);
           L.tiles.push({
             name: base + (sharp.length > 1 ? String.fromCharCode(97 + k) : ""),
             col: ci,
@@ -3019,7 +3058,7 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
             return n % 2 == 1;
           };
           const add = (t, p) => {
-            t.m4.every(q => Math.hypot(q[0] - p[0], q[1] - p[1]) > 6) && t.m4.push(p);
+            t.m4.every(q => Math.hypot(q[0] - p[0], q[1] - p[1]) >= 13) && t.m4.push(p);
           };
           for (let a = 0; a < L.tiles.length; a++) for (let b = a + 1; b < L.tiles.length; b++) {
             const A = L.tiles[a], B = L.tiles[b];
@@ -6982,7 +7021,7 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
   });
   const KEEP = [ "W", "H", "cutouts", "printer", "bedW", "bedD", "modW", "modH", "freeCuts", "src", "scene", "shape", "shp", "seed", "scale", "offX", "offY", "rot", "k", "nodes", "gap", "line", "pal", "merges", "body", "imgName", "imgBg", "pins", "round", "snap", "screwCaps", "saver" ];
   const snapshot = () => JSON.stringify(Object.fromEntries(KEEP.map(k => [ k, S[k] ])));
-  const FORMAT = 1, APP_VERSION = "V2.1";
+  const FORMAT = 1, APP_VERSION = "V2.2";
   const isObj = v => v && "object" == typeof v && !Array.isArray(v);
   function applyState(st, img) {
     for (const k of KEEP) k in st && (S[k] = JSON.parse(JSON.stringify(st[k])));
