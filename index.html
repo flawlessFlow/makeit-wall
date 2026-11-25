@@ -6011,11 +6011,13 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
   }
   const sizeW = () => S.W, sizeH = () => S.H;
   $("inW").addEventListener("change", () => {
-    setSize(+$("inW").value, sizeH());
+    const r = lockedRatio(), w = +$("inW").value;
+    setSize(w, r ? Math.round(sizeH() > sizeW() ? w * r : w / r) : sizeH());
     /^Wall set to /.test($("status").textContent) && setStatus("");
   });
   $("inH").addEventListener("change", () => {
-    setSize(sizeW(), +$("inH").value);
+    const r = lockedRatio(), h = +$("inH").value;
+    setSize(r ? Math.round(sizeH() > sizeW() ? h / r : h * r) : sizeW(), h);
     /^Wall set to /.test($("status").textContent) && setStatus("");
   });
   $("sizeChips").addEventListener("click", e => {
@@ -6047,6 +6049,9 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
     mm: [ [ 560, 360 ], [ 560, 560 ], [ 760, 560 ] ]
   } ];
   let sizeFmt = null;
+  let sizeLock = !1;
+  const isRatio = f => !!f && /^\d+:\d+$/.test(f.id);
+  const lockedRatio = () => sizeLock && isRatio(sizeFmt) ? sizeFmt.mm[0][0] / sizeFmt.mm[0][1] : 0;
   const sizeList = f => "in" === UNIT && f.in ? f.in.map(([w, h, n]) => ({
     w: Math.round(25.4 * w),
     h: Math.round(25.4 * h),
@@ -6063,9 +6068,14 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
     const has = f => sizeList(f).some(q => near(q.w, Math.max(W, H)) && near(q.h, Math.min(W, H)));
     if (!fmts.includes(sizeFmt) || !has(sizeFmt)) {
       const r = Math.max(W, H) / Math.min(W, H), ratio = f => f.mm[0][0] / f.mm[0][1];
+      const was = sizeFmt;
       sizeFmt = fmts.find(has) || (fmts.includes(sizeFmt) ? sizeFmt : fmts.slice(0, 4).reduce((b, f) => Math.abs(ratio(f) - r) < Math.abs(ratio(b) - r) ? f : b));
+      sizeFmt !== was && (sizeLock = !1);
     }
-    $("sizeFmt").innerHTML = fmts.map(f => `<button class="chip" data-f="${f.id}" aria-pressed="${f === sizeFmt}">${f.id}</button>`).join("") + `<button class="chip orient" data-orient="1"${W === H ? " disabled" : ""} data-tip="Turn the wall: width and height swap.">${port ? "↕ Portrait" : "↔ Landscape"}</button>`;
+    $("sizeFmt").innerHTML = fmts.map(f => {
+      const fixed = f === sizeFmt && lockedRatio();
+      return `<button class="chip" data-f="${f.id}" aria-pressed="${f === sizeFmt}"${isRatio(f) ? ` data-tip="${fixed ? "Width and height keep " + f.id + " – click again to set them freely." : "Sizes in " + f.id + "; width and height then keep this ratio."}"` : ""}>${f.id}${fixed ? " · fixed" : ""}</button>`;
+    }).join("") + `<button class="chip orient" data-orient="1"${W === H ? " disabled" : ""} data-tip="Turn the wall: width and height swap.">${port ? "↕ Portrait" : "↔ Landscape"}</button>`;
     $("sizeChips").innerHTML = sizeList(sizeFmt).map(q => {
       const [w, h] = port ? [ q.h, q.w ] : [ q.w, q.h ], t = port ? q.t.replace(/^(\S+) × (\S+)/, "$2 × $1") : q.t;
       return `<button class="chip" data-w="${w}" data-h="${h}" aria-pressed="${near(w, W) && near(h, H)}">${q.n ? q.n + " · " : ""}${t}</button>`;
@@ -6078,7 +6088,14 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
       setSize(sizeH(), sizeW());
       return;
     }
-    sizeFmt = SIZE_FMTS.find(f => f.id === b.dataset.f);
+    const f = SIZE_FMTS.find(f2 => f2.id === b.dataset.f);
+    if (f === sizeFmt && sizeLock) {
+      sizeLock = !1;
+      renderSizeChips();
+      return;
+    }
+    sizeFmt = f;
+    sizeLock = isRatio(f);
     const W = sizeW(), H = sizeH(), port = H > W, A = W * H;
     const q = sizeList(sizeFmt).reduce((b2, q2) => Math.abs(Math.log(q2.w * q2.h / A)) < Math.abs(Math.log(b2.w * b2.h / A)) ? q2 : b2);
     setSize(port ? q.h : q.w, port ? q.w : q.h);
@@ -7024,7 +7041,7 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
   });
   const KEEP = [ "W", "H", "cutouts", "printer", "bedW", "bedD", "modW", "modH", "freeCuts", "src", "scene", "shape", "shp", "seed", "scale", "offX", "offY", "rot", "k", "nodes", "gap", "line", "pal", "merges", "body", "imgName", "imgBg", "pins", "round", "snap", "screwCaps", "saver" ];
   const snapshot = () => JSON.stringify(Object.fromEntries(KEEP.map(k => [ k, S[k] ])));
-  const FORMAT = 1, APP_VERSION = "V2.4";
+  const FORMAT = 1, APP_VERSION = "V2.5";
   $("appVer").textContent = APP_VERSION;
   const isObj = v => v && "object" == typeof v && !Array.isArray(v);
   function applyState(st, img) {

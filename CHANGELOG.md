@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.5.0 – 2026-11-25
+
+- A clicked ratio format (1:1, 4:3, 3:2, 16:9) now keeps width and height in that ratio: type 100 as the width with 1:1 and the height follows. The chip shows “fixed”; click it again to set both sides freely
+
 ## v2.4.0 – 2026-11-25
 
 - Click the logo to open a new, empty MakeIt Wall in a new tab – your current project stays in its own tab
