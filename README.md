@@ -8,7 +8,7 @@
 
 Everything runs in your browser. No account, no upload, no install.
 
-**[▶ Open MakeIt Wall](https://flawlessFlow.github.io/makeit-wall/)** &nbsp;·&nbsp; [Download the latest version](../../releases/latest) &nbsp;·&nbsp; [More walls on MakerWorld](https://makerworld.com/de/collections/39915612-makeit-wall)
+**[▶ Open MakeIt Wall](https://flawlessFlow.github.io/makeit-wall/)** &nbsp;·&nbsp; [Download the latest version](../../releases/latest) &nbsp;·&nbsp; [MakeIt Wall on MakerWorld](https://makerworld.com/de/models/3682043-skadis-wall-art-generator-makeit-wall)
 
 ![MakeIt Wall – wall and tiles](docs/screenshot-main.png)
 
@@ -66,8 +66,8 @@ Download `index.html` (or the file attached to the [latest release](../../releas
 
 ## More walls & support
 
-Printed examples and ready-made walls are in the **[MakeIt Wall collection](https://makerworld.com/de/collections/39915612-makeit-wall)** on MakerWorld.
-If MakeIt Wall is useful to you, please **[boost and rate the MakeIt Wall model](https://makerworld.com/en/models/3565219-skadis-landscape-mountains-makeit-wall#profileId-4080384)** and follow [@flowok](https://makerworld.com/de/@flowok). It helps a lot!
+Examples, print profiles and walls made by others are on the **[MakeIt Wall page on MakerWorld](https://makerworld.com/de/models/3682043-skadis-wall-art-generator-makeit-wall)**.
+If MakeIt Wall is useful to you, please **[boost and rate MakeIt Wall on MakerWorld](https://makerworld.com/de/models/3682043-skadis-wall-art-generator-makeit-wall)** and follow @flowok there. It helps a lot!
 
 ## Feedback
 

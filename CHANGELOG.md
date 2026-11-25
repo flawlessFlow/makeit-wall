@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.0 – 2026-11-25
+
+- All MakerWorld links (step 2 Artwork and the thank-you note after the export) now open the MakeIt Wall page on MakerWorld: https://makerworld.com/de/models/3682043-skadis-wall-art-generator-makeit-wall
+
 ## v2.2.0 – 2026-11-25
 
 - Screw holes never overlap: two holes of one tile closer than 13 mm become one hole (e.g. a narrow strip next to a cut-out)
