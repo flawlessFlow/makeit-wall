@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.4.0 – 2026-11-25
+
+- Click the logo to open a new, empty MakeIt Wall in a new tab – your current project stays in its own tab
+- The version number is shown next to the title
+- Tiles as even as possible for custom sizes: seams now sit on the 20 mm slot grid instead of 40 mm (e.g. 750 mm high: 200/180/180/190 instead of 200/200/160/190); the slots keep running across the seams
+
 ## v2.3.0 – 2026-11-25
 
 - All MakerWorld links (step 2 Artwork and the thank-you note after the export) now open the MakeIt Wall page on MakerWorld: https://makerworld.com/de/models/3682043-skadis-wall-art-generator-makeit-wall

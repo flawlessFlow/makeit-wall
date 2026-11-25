@@ -21,9 +21,11 @@ button, input, select { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .top { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding-block: 12px; background: var(--panel); border-bottom: 1px solid var(--line);
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-.mark { width: 32px; height: 32px; border-radius: 7px; background: var(--accent); position: relative; flex: none; }
+.mark { width: 32px; height: 32px; border-radius: 7px; background: var(--accent); position: relative; flex: none; cursor: pointer; }
 .mark i { position: absolute; width: 4px; height: 10px; border-radius: 2px; background: var(--accent-ink); }
 .top h1 { font-size: 19px; font-weight: 700; margin: 0; letter-spacing: -.01em; }
+.top .titlerow { display: flex; align-items: baseline; gap: 8px; }
+.top .ver { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
 .top .sub { color: var(--muted); font-size: 14px; }
 .top .spacer { flex: 1; }
 .summary { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -281,9 +283,9 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
 
 <div class="appbar" id="appbar">
 <header class="top">
-  <div class="mark" aria-hidden="true"><i style="left:8px;top:6px"></i><i style="left:20px;top:6px"></i><i style="left:14px;top:17px"></i></div>
+  <div class="mark" id="btnLogo" role="button" tabindex="0" aria-label="Open a new, empty generator in a new tab" data-tip="Open a new, empty generator in a new tab (this one keeps your project)."><i style="left:8px;top:6px"></i><i style="left:20px;top:6px"></i><i style="left:14px;top:17px"></i></div>
   <div>
-    <h1>MakeIt Wall</h1>
+    <div class="titlerow"><h1>MakeIt Wall</h1><span class="ver" id="appVer" data-tip="Version of this generator"></span></div>
     <div class="sub">make it yours</div>
   </div>
   <div class="spacer"></div>
@@ -1457,11 +1459,11 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
     for (const c of L.cutouts) if (x > c.x - m && x < c.x + c.w + m && y > c.y - m && y < c.y + c.h + m) return !1;
     return !0;
   }
-  function chooseSeams(total, maxLen, edges) {
+  function chooseSeams(total, maxLen, edges, step = SK.module) {
     const inner = edges.filter(e => e > 0 && e < total);
     const ok = s => inner.every(e => e === s || Math.abs(e - s) >= 60);
     const pos = [ 0 ];
-    for (let s = SK.module; s < total; s += SK.module) ok(s) && pos.push(s);
+    for (let s = step; s < total; s += step) ok(s) && pos.push(s);
     pos.push(total);
     const cost = new Array(pos.length).fill(1 / 0), prev = new Array(pos.length).fill(-1);
     cost[0] = 0;
@@ -1485,8 +1487,8 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
     for (;total - at > maxLen; ) {
       const n = Math.ceil((total - at) / maxLen), target = at + (total - at) / n;
       let best = null;
-      for (let s = Math.ceil((at + 60) / SK.module) * SK.module; s <= at + maxLen; s += SK.module) ok(s) && (null === best || Math.abs(s - target) < Math.abs(best - target)) && (best = s);
-      null === best && (best = Math.floor((at + maxLen) / SK.module) * SK.module);
+      for (let s = Math.ceil((at + 60) / step) * step; s <= at + maxLen; s += step) ok(s) && (null === best || Math.abs(s - target) < Math.abs(best - target)) && (best = s);
+      null === best && (best = Math.floor((at + maxLen) / step) * step);
       if (best <= at) break;
       seams.push(best);
       at = best;
@@ -2896,8 +2898,9 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
         vx.push(c.x, c.x + c.w);
         vy.push(c.y, c.y + c.h);
       }
-      L.seamsX = chooseSeams(W, maxW, vx.concat([ 0 ]));
-      L.seamsY = chooseSeams(H, maxH, vy.concat([ 0 ]));
+      const step = !1 === opt.slots ? 1 : SK.grid;
+      L.seamsX = chooseSeams(W, maxW, vx.concat([ 0 ]), step);
+      L.seamsY = chooseSeams(H, maxH, vy.concat([ 0 ]), step);
       const xs = [ 0, ...L.seamsX, W ], ys = [ 0, ...L.seamsY, H ];
       L.cols = xs.slice(1).map((x, i) => x - xs[i]);
       L.rows = ys.slice(1).map((y, i) => y - ys[i]);
@@ -7021,7 +7024,8 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
   });
   const KEEP = [ "W", "H", "cutouts", "printer", "bedW", "bedD", "modW", "modH", "freeCuts", "src", "scene", "shape", "shp", "seed", "scale", "offX", "offY", "rot", "k", "nodes", "gap", "line", "pal", "merges", "body", "imgName", "imgBg", "pins", "round", "snap", "screwCaps", "saver" ];
   const snapshot = () => JSON.stringify(Object.fromEntries(KEEP.map(k => [ k, S[k] ])));
-  const FORMAT = 1, APP_VERSION = "V2.3";
+  const FORMAT = 1, APP_VERSION = "V2.4";
+  $("appVer").textContent = APP_VERSION;
   const isObj = v => v && "object" == typeof v && !Array.isArray(v);
   function applyState(st, img) {
     for (const k of KEEP) k in st && (S[k] = JSON.parse(JSON.stringify(st[k])));
@@ -7134,47 +7138,57 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
   }
   const AUTOKEY = FILE + "-autosave-v1";
   function autosave() {
-    clearTimeout(autosave.t);
-    autosave.t = setTimeout(() => {
-      const data = {
-        format: FORMAT,
-        app: APP_VERSION,
-        state: JSON.parse(snapshot()),
-        img: imageData()
-      };
-      try {
-        localStorage.setItem(AUTOKEY, JSON.stringify(data));
-      } catch (e) {
+    if (!autosave.skip) {
+      clearTimeout(autosave.t);
+      autosave.t = setTimeout(() => {
+        const data = {
+          format: FORMAT,
+          app: APP_VERSION,
+          state: JSON.parse(snapshot()),
+          img: imageData()
+        };
         try {
-          data.img = S.img ? function smallData(im) {
-            if (!im._small) {
-              const iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height, k = Math.min(1, 2560 / Math.max(iw, ih));
-              const c = document.createElement("canvas");
-              c.width = Math.max(1, Math.round(iw * k));
-              c.height = Math.max(1, Math.round(ih * k));
-              const ctx = c.getContext("2d");
-              ctx.drawImage(im, 0, 0, c.width, c.height);
-              const a = ctx.getImageData(0, 0, c.width, c.height).data;
-              let opaque = !0;
-              for (let i = 3; i < a.length; i += 4) if (a[i] < 255) {
-                opaque = !1;
-                break;
-              }
-              im._small = c.toDataURL(opaque ? "image/jpeg" : "image/webp", .92);
-            }
-            return im._small;
-          }(S.img) : null;
           localStorage.setItem(AUTOKEY, JSON.stringify(data));
-        } catch (e2) {
+        } catch (e) {
           try {
-            data.img = null;
+            data.img = S.img ? function smallData(im) {
+              if (!im._small) {
+                const iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height, k = Math.min(1, 2560 / Math.max(iw, ih));
+                const c = document.createElement("canvas");
+                c.width = Math.max(1, Math.round(iw * k));
+                c.height = Math.max(1, Math.round(ih * k));
+                const ctx = c.getContext("2d");
+                ctx.drawImage(im, 0, 0, c.width, c.height);
+                const a = ctx.getImageData(0, 0, c.width, c.height).data;
+                let opaque = !0;
+                for (let i = 3; i < a.length; i += 4) if (a[i] < 255) {
+                  opaque = !1;
+                  break;
+                }
+                im._small = c.toDataURL(opaque ? "image/jpeg" : "image/webp", .92);
+              }
+              return im._small;
+            }(S.img) : null;
             localStorage.setItem(AUTOKEY, JSON.stringify(data));
-          } catch (e3) {}
+          } catch (e2) {
+            try {
+              data.img = null;
+              localStorage.setItem(AUTOKEY, JSON.stringify(data));
+            } catch (e3) {}
+          }
         }
-      }
-    }, 600);
+      }, 600);
+    }
   }
   const DEFAULTS = JSON.parse(snapshot());
+  const openNewTab = () => window.open(location.href.split("#")[0] + "#new", "_blank");
+  $("btnLogo").addEventListener("click", openNewTab);
+  $("btnLogo").addEventListener("keydown", e => {
+    if ("Enter" === e.key || " " === e.key) {
+      e.preventDefault();
+      openNewTab();
+    }
+  });
   $("btnNew").addEventListener("click", () => {
     applyState(DEFAULTS);
     resetColours();
@@ -7455,12 +7469,23 @@ dialog.thanks .foot { display: flex; justify-content: flex-end; }
   cleanup();
   updateLayout();
   drawAll();
+  const freshTab = "#new" === location.hash;
+  if (freshTab) {
+    history.replaceState(null, "", location.href.split("#")[0]);
+    autosave.skip = !0;
+    [ "pointerdown", "keydown", "drop", "paste" ].forEach(ev => addEventListener(ev, () => {
+      autosave.skip = !1;
+    }, {
+      once: !0,
+      capture: !0
+    }));
+  }
   remember();
   let last = null;
   try {
     last = JSON.parse(localStorage.getItem(AUTOKEY) || "null");
   } catch (e) {}
-  last && last.state && (hist.base = !0, async function restore(data, note) {
+  !freshTab && last && last.state && (hist.base = !0, async function restore(data, note) {
     if (!isObj(data) || !isObj(data.state)) throw new Error("no saved session");
     const img = await (data => new Promise(res => {
       if (!data) return res(null);
